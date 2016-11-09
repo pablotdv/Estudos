@@ -1,0 +1,19 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    Layout = "";
+}
+
+
+<h1>Controllers</h1>
+<div ng-app="personApp">
+    <div ng-controller="personController">
+        <strong>First Name:</strong> {{firstName}} <br />
+        <strong>Last Name:</strong> {{lastName}} <br />
+        <strong>Missing Property (age): </strong> {{age}}
+    </div>
+</div>
+
+<script src="~/lib/angular/angular.js"></script>
+<script src="~/app/controllers.js"></script>

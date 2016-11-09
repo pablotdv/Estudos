@@ -1,0 +1,61 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    Layout = "";
+}
+
+<html>
+<body ng-app>
+    <h1>Directives</h1>
+    {{2+2}}
+    <hr />
+    <h1>Databinding</h1>
+    <div ng-init="firstName='Pablo'; lastName='Tondolo';">
+        <strong>First name:</strong>{{firstName}} <br />
+        <strong>Last name: </strong><span ng-bind="lastName" />
+    </div>
+    <hr />
+    <h1>Templates</h1>
+    <div ng-init="personName='Pablo Tôndolo'">
+        <input ng-model="personName" /> {{personName}}
+    </div>
+    <hr />
+    <h1>Expressions</h1>
+    <div ng-init="personName='Pablo Tôndolo'">
+        Person's name is: {{personName}} <br />
+        Simple JavaScript calculation of 1 + 2: {{1+2}}
+    </div>
+    <hr />
+    <h1>Repeaters</h1>
+    <div ng-init="names=['Pablo Tondolo', 'Mary Jane', 'Bob Parker']">
+        <ul>
+            <li ng-repeat="name in names">
+                {{name}}
+            </li>
+        </ul>
+    </div>
+    <hr />
+    <h1>Repeaters2</h1>
+    <div ng-init="names=[
+         {firstName: 'Pablo', lastName:'Tôndolo'},
+         {firstName: 'Greice', lastName:'Tôndolo'},
+         {firstName: 'Cristian', lastName:'Tôndolo'}]">
+        <ul>
+            <li ng-repeat="name in names">
+                {{name.firstName + ' ' + name.lastName}} at index {{$index}}
+                <span ng-show="{{$first}}">, the first position</span>
+                <span ng-show="{{$last}}">, the last position</span>
+                <span ng-show="{{$odd}}">, wich is odd-numbered.</span>
+                <span ng-show="{{$even}}">, wich is even-numbered.</span>
+            </li>
+        </ul>
+    </div>
+    <hr />
+
+    
+
+    <script src="~/lib/angular/angular.js"></script>
+    
+</body>
+</html>
