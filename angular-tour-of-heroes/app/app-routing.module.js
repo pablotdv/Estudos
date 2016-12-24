@@ -9,32 +9,32 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 var core_1 = require('@angular/core');
-var hero_service_1 = require('./hero.service');
-var DashboardComponent = (function () {
-    function DashboardComponent(heroService) {
-        this.heroService = heroService;
-        this.heroes = [];
+var router_1 = require('@angular/router');
+var dashboard_component_1 = require('./dashboard.component');
+var heroes_component_1 = require('./heroes.component');
+var hero_detail_component_1 = require('./hero-detail.component');
+var routes = [
+    { path: '', redirectTo: '/dashboard', pathMatch: 'full' },
+    { path: 'dashboard', component: dashboard_component_1.DashboardComponent },
+    { path: 'detail/:id', component: hero_detail_component_1.HeroDetailComponent },
+    { path: 'heroes', component: heroes_component_1.HeroesComponent }
+];
+var AppRoutingModule = (function () {
+    function AppRoutingModule() {
     }
-    DashboardComponent.prototype.ngOnInit = function () {
-        var _this = this;
-        this.heroService.getHeroes()
-            .then(function (heroes) { return _this.heroes = heroes.slice(1, 5); });
-    };
-    DashboardComponent = __decorate([
-        core_1.Component({
-            moduleId: module.id,
-            selector: 'my-dashboard',
-            templateUrl: 'dashboard.component.html',
-            styleUrls: ['dashboard.component.css']
+    AppRoutingModule = __decorate([
+        core_1.NgModule({
+            imports: [router_1.RouterModule.forRoot(routes)],
+            exports: [router_1.RouterModule]
         }), 
-        __metadata('design:paramtypes', [hero_service_1.HeroService])
-    ], DashboardComponent);
-    return DashboardComponent;
+        __metadata('design:paramtypes', [])
+    ], AppRoutingModule);
+    return AppRoutingModule;
 }());
-exports.DashboardComponent = DashboardComponent;
+exports.AppRoutingModule = AppRoutingModule;
 /*
 Copyright 2016 Google Inc. All Rights Reserved.
 Use of this source code is governed by an MIT-style license that
 can be found in the LICENSE file at http://angular.io/license
 */ 
-//# sourceMappingURL=dashboard.component.js.map
+//# sourceMappingURL=app-routing.module.js.map
