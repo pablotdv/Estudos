@@ -23,6 +23,7 @@ var DashboardComponent = (function () {
     DashboardComponent = __decorate([
         core_1.Component({
             moduleId: module.id,
+            styleUrls: ['app.component.css'],
             selector: 'my-dashboard',
             templateUrl: 'dashboard.component.html'
         }), 
