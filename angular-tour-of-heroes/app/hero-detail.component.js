@@ -25,13 +25,13 @@ var HeroDetailComponent = (function () {
             .switchMap(function (params) { return _this.heroService.getHero(+params['id']); })
             .subscribe(function (hero) { return _this.hero = hero; });
     };
-    HeroDetailComponent.prototype.goBack = function () {
-        this.location.back();
-    };
     HeroDetailComponent.prototype.save = function () {
         var _this = this;
         this.heroService.update(this.hero)
             .then(function () { return _this.goBack(); });
+    };
+    HeroDetailComponent.prototype.goBack = function () {
+        this.location.back();
     };
     HeroDetailComponent = __decorate([
         core_1.Component({
@@ -45,9 +45,4 @@ var HeroDetailComponent = (function () {
     return HeroDetailComponent;
 }());
 exports.HeroDetailComponent = HeroDetailComponent;
-/*
-Copyright 2016 Google Inc. All Rights Reserved.
-Use of this source code is governed by an MIT-style license that
-can be found in the LICENSE file at http://angular.io/license
-*/ 
 //# sourceMappingURL=hero-detail.component.js.map
