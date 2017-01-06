@@ -1,3 +1,4 @@
+/* SignalR related interfaces  */
 export interface FeedSignalR extends SignalR {
     broadcaster: FeedProxy
 }
