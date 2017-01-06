@@ -20,7 +20,7 @@ namespace LiveGameFeed.Core
         }
         public void Run(TaskRunStatus taskRunStatus)
         {
-            var msg = string.Format("Run at: {}", DateTimeOffset.Now);
+            var msg = string.Format("Run at: {0}", DateTimeOffset.Now);
             logger.LogDebug(msg);
             UpdateScore();
         }
@@ -38,7 +38,8 @@ namespace LiveGameFeed.Core
 
                 if (updateHost)
                     match.HostScore += points;
-                else match.GuestScore += points;
+                else
+                    match.GuestScore += points;
 
                 MatchScore score = new MatchScore()
                 {
@@ -52,14 +53,13 @@ namespace LiveGameFeed.Core
                     score.GuestScore = 0;
                     _matchEnded = true;
                 }
-
-                using(var client = new HttpClient())
+                // Update Score for all clients
+                using (var client = new HttpClient())
                 {
                     await client.PutAsJsonAsync<MatchScore>(Startup.API_URL + "matches/" + match.Id, score);
                 }
 
-
-
+                // Update Feed for subscribed only clients
 
 
                 FeedViewModel _feed = new FeedViewModel()
