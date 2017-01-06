@@ -1,6 +1,7 @@
 namespace LiveGameFeed.Models
 {
-    public enum MatchTypeEnums {
+    public enum MatchTypeEnums
+    {
         Football,
         Basketball
     }
