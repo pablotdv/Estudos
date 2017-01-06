@@ -2,8 +2,8 @@ import { Injectable } from '@angular/core';
 import { Http } from '@angular/http';
 
 import 'rxjs/add/operator/toPromise';
-import { Observable } from 'rxjs/Observable';
-import { Subject } from 'rxjs/Subject';
+import { Observable } from "rxjs/Observable";
+import { Subject } from "rxjs/Subject";
 
 import { FeedSignalR, FeedProxy, FeedClient, FeedServer, SignalRConnectionStatus, ChatMessage, Match, Feed } from '../interfaces';
 
@@ -14,12 +14,12 @@ export class FeedService {
     connectionState: Observable<SignalRConnectionStatus>;
 
     setConnectionId: Observable<string>;
-    updateMatch: Observable<Match>;    
+    updateMatch: Observable<Match>;
     addFeed: Observable<Feed>;
-    addChatMessage: Observable<ChatMessage>
-    
-    private connectionStateSubject = new Subject<SignalRConnectionStatus>();
+    addChatMessage: Observable<ChatMessage>;
 
+    private connectionStateSubject = new Subject<SignalRConnectionStatus>();
+    
     private setConnectionIdSubject = new Subject<string>();
     private updateMatchSubject = new Subject<Match>();
     private addFeedSubject = new Subject<Feed>();
@@ -37,40 +37,40 @@ export class FeedService {
     }
 
     start(debug: boolean): Observable<SignalRConnectionStatus> {
-        
+
         $.connection.hub.logging = debug;
-
+        
         let connection = <FeedSignalR>$.connection;
-
+        // reference signalR hub named 'broadcaster'
         let feedHub = connection.broadcaster;
         this.server = feedHub.server;
 
-        
+        // setConnectionId method called by server
         feedHub.client.setConnectionId = id => this.onSetConnectionId(id);
 
+        // updateMatch method called by server
+        feedHub.client.updateMatch = match => this.onUpdateMatch(match);
 
-        feedHub.client.updateMatch = match => this.onUpdateMatch(math);
-
-
+        // addFeed method called by server
         feedHub.client.addFeed = feed => this.onAddFeed(feed);
 
         feedHub.client.addChatMessage = chatMessage => this.onAddChatMessage(chatMessage);
 
-
+        // start the connection
         $.connection.hub.start()
             .done(response => this.setConnectionState(SignalRConnectionStatus.Connected))
             .fail(error => this.connectionStateSubject.error(error));
 
-        return this.connectionState;        
+        return this.connectionState;
     }
 
     private setConnectionState(connectionState: SignalRConnectionStatus) {
-        console.log('connection state change to: ' + connectionState);
+        console.log('connection state changed to: ' + connectionState);
         this.currentState = connectionState;
         this.connectionStateSubject.next(connectionState);
     }
 
-
+    // Client side methods
     private onSetConnectionId(id: string) {
         this.setConnectionIdSubject.next(id);
     }
@@ -85,11 +85,11 @@ export class FeedService {
     }
 
     private onAddChatMessage(chatMessage: ChatMessage) {
-        this.addChatMessageSubject.next(chatMessage);        
+        this.addChatMessageSubject.next(chatMessage);
     }
 
-    
-    public subscriveToFeed(matchId: number) {
+    // Server side methods
+    public subscribeToFeed(matchId: number) {
         this.server.subscribe(matchId);
     }
 
