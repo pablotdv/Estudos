@@ -1,10 +1,10 @@
 using System.Collections.Generic;
-using AutoMapper;
-using LiveGameFeed.Data.Abstract;
-using LiveGameFeed.Hubs;
-using LiveGameFeed.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR.Infrastructure;
+using LiveGameFeed.Hubs;
+using LiveGameFeed.Data.Abstract;
+using LiveGameFeed.Models;
+using AutoMapper;
 
 namespace LiveGameFeed.Controllers
 {
@@ -12,12 +12,15 @@ namespace LiveGameFeed.Controllers
     public class MatchesController : ApiHubController<Broadcaster>
     {
         IMatchRepository _matchRepository;
-        public MatchesController(IConnectionManager signalRConnectionManager, IMatchRepository matchRepository)
-            : base(signalRConnectionManager)
+        public MatchesController(
+            IConnectionManager signalRConnectionManager,
+            IMatchRepository matchRepository)
+        : base(signalRConnectionManager)
         {
             _matchRepository = matchRepository;
         }
 
+        // GET api/values
         [HttpGet]
         public IEnumerable<MatchViewModel> Get()
         {
@@ -27,6 +30,7 @@ namespace LiveGameFeed.Controllers
             return _matchesVM;
         }
 
+        // PUT api/values/5
         [HttpPut("{id}")]
         public async void Put(int id, [FromBody]MatchScore score)
         {
@@ -42,8 +46,7 @@ namespace LiveGameFeed.Controllers
             _matchRepository.Commit();
 
             MatchViewModel _matchVM = Mapper.Map<Match, MatchViewModel>(_match);
-            await Clients.All.UpdateMatch(_match);
+            await Clients.All.UpdateMatch(_matchVM);
         }
     }
-
 }

@@ -3,14 +3,14 @@ using Microsoft.AspNetCore.SignalR.Infrastructure;
 using LiveGameFeed.Hubs;
 using LiveGameFeed.Models;
 
-namespace LiveGameFeed.Controllers 
+namespace LiveGameFeed.Controllers
 {
     [Route("api/[controller]")]
-    public class MessagesController: ApiHubController<Broadcaster>
+    public class MessagesController : ApiHubController<Broadcaster>
     {
         public MessagesController(
             IConnectionManager signalRConnectionManager)
-        :base(signalRConnectionManager)
+        : base(signalRConnectionManager)
         {
 
         }

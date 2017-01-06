@@ -12,22 +12,22 @@ namespace LiveGameFeed.Controllers
     {
         IFeedRepository _feedRepository;
         IMatchRepository _matchRepository;
-
         public FeedsController(
             IConnectionManager signalRConnectionManager,
             IFeedRepository feedRepository,
-            IMatchRepository matchRepository
-        ) : base(signalRConnectionManager)
+            IMatchRepository matchRepository)
+        : base(signalRConnectionManager)
         {
             _feedRepository = feedRepository;
             _matchRepository = matchRepository;
         }
 
+        // POST api/feeds
         [HttpPost]
         public async void Post([FromBody]FeedViewModel feed)
         {
             Match _match = _matchRepository.GetSingle(feed.MatchId);
-            Feed _matchFeed = new Feed()
+            Feed _matchFeed = new Feed() 
             {
                 Description = feed.Description,
                 CreatedAt = feed.CreatedAt,
@@ -42,5 +42,6 @@ namespace LiveGameFeed.Controllers
 
             await Clients.Group(feed.MatchId.ToString()).AddFeed(_feedVM);
         }
+
     }
 }
