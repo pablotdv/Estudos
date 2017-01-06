@@ -1,10 +1,17 @@
+using System;
+using LiveGameFeed.Data;
+using LiveGameFeed.Data.Repositories;
+using LiveGameFeed.Data.Abstract;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using LiveGameFeed.Core.Mappings;
 using Newtonsoft.Json.Serialization;
+using RecurrentTasks;
+using LiveGameFeed.Core;
 
 namespace LiveGameFeed
 {
@@ -18,7 +25,6 @@ namespace LiveGameFeed
                 .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
                 .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true)
                 .AddEnvironmentVariables();
-
             Configuration = builder.Build();
 
             API_URL = Configuration["apiURL"];
@@ -27,20 +33,25 @@ namespace LiveGameFeed
         public IConfigurationRoot Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
-        // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
-            //services.AddDbContext<LiveGameContext>(options => options.UseInMemoryDataBase());
+            services.AddDbContext<LiveGameContext>(options => options.UseInMemoryDatabase());
+            // Repositories
+            services.AddScoped<IMatchRepository, MatchRepository>();
+            services.AddScoped<IFeedRepository, FeedRepository>();
 
-            //AutoMapperConfiguration.Configure();
-
+            // Automapper Configuration
+            AutoMapperConfiguration.Configure();
+            
+            // Add framework services.
             services
                 .AddMvc()
-                .AddJsonOptions(options => options.SerializerSettings.ContractResolver = new DefaultContractResolver());
+                .AddJsonOptions(options => options.SerializerSettings.ContractResolver = 
+                    new DefaultContractResolver());
 
             services.AddSignalR(options => options.Hubs.EnableDetailedErrors = true);
 
-            //services.AddTask<FeedEngine>();
+            services.AddTask<FeedEngine>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -57,22 +68,17 @@ namespace LiveGameFeed
                 .UseStaticFiles()
                 .UseWebSockets();
 
-            if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-            }
-
             app.UseMvc(routes =>
             {
                 routes.MapRoute(
                     name: "default",
-                    template: "{controller=Home}/{action=Index}/{id?}"
-                );
+                    template: "{controller=Home}/{action=Index}/{id?}");
             });
-
             app.UseSignalR();
 
-            
+            LiveGameDbInitializer.Initialize(app.ApplicationServices);
+
+            app.StartTask<FeedEngine>(TimeSpan.FromSeconds(15));
         }
     }
 }
