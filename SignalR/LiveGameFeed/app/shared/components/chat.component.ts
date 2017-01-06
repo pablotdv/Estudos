@@ -22,10 +22,10 @@ export class ChatComponent implements OnInit {
             message => {
                 console.log('received..');
                 console.log(message);
-                if (!self.messages)
+                if(!self.messages)
                     self.messages = new Array<ChatMessage>();
                 self.messages.unshift(message);
             }
         )
-    }
+     }
 }
