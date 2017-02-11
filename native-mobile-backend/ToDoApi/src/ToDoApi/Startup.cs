@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using ToDoApi.Models;
 
 namespace ToDoApi
 {
@@ -29,6 +30,8 @@ namespace ToDoApi
         {
             // Add framework services.
             services.AddMvc();
+
+            services.AddSingleton<IToDoRepository, ToDoRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -36,8 +39,8 @@ namespace ToDoApi
         {
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
-
-            app.UseMvc();
+            
+            app.UseMvc();            
         }
     }
 }
