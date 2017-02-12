@@ -13,22 +13,22 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 
-// The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234238
+// The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=391641
 
 namespace TodoREST.WinPhone
 {
     /// <summary>
     /// An empty page that can be used on its own or navigated to within a Frame.
     /// </summary>
-    public sealed partial class MainPage
+    public sealed partial class MainPage : Page
     {
+        int count = 1;
+
         public MainPage()
         {
             this.InitializeComponent();
 
             this.NavigationCacheMode = NavigationCacheMode.Required;
-
-            LoadApplication(new TodoREST.App());
         }
 
         /// <summary>
@@ -45,6 +45,11 @@ namespace TodoREST.WinPhone
             // Windows.Phone.UI.Input.HardwareButtons.BackPressed event.
             // If you are using the NavigationHelper provided by some templates,
             // this event is handled for you.
+            Button.Click += delegate
+            {
+                var title = string.Format("{0} clicks!", count++);
+                Button.Content = title;
+            };
         }
     }
 }
