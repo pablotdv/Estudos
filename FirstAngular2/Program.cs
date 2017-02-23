@@ -1,5 +1,4 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using Microsoft.AspNetCore.Hosting;
 
 namespace FirstAngular2
@@ -15,7 +14,7 @@ namespace FirstAngular2
                 .UseStartup<Startup>()
                 .Build();
 
-                host.Run();
+            host.Run();
         }
     }
 }

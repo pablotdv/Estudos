@@ -1,16 +1,19 @@
 {
+    // See https://go.microsoft.com/fwlink/?LinkId=733558
+    // for the documentation about the tasks.json format
     "version": "0.1.0",
-    "command": "dotnet",
+    "command": "npm",
     "isShellCommand": true,
-    "args": [],
+    "showOutput": "always",
+    "suppressTaskName": true,
     "tasks": [
         {
-            "taskName": "build",
-            "args": [
-                "${workspaceRoot}\\FirstAngular2.csproj"
-            ],
             "isBuildCommand": true,
-            "problemMatcher": "$msCompile"
+            "taskName": "start",
+            "args": [
+                "start"
+            ],
+            "isBackground": true
         }
     ]
 }
