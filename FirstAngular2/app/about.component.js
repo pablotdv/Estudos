@@ -7,17 +7,17 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var core_1 = require("@angular/core");
-var AppComponet = (function () {
-    function AppComponet() {
+var AboutComponent = (function () {
+    function AboutComponent() {
     }
-    return AppComponet;
+    return AboutComponent;
 }());
-AppComponet = __decorate([
+AboutComponent = __decorate([
     core_1.Component({
         moduleId: module.id,
-        selector: 'my-app',
-        template: 'Hello, Angular 2 World',
+        selector: 'my-about',
+        template: "\n        <h2>About Sriracha</h2>\n        <p>This is what Wikipedia says about <a href=\"https://en.wikipedia.org/wiki/Sriracha_sauce_%28Huy_Fong_Foods%29\">Sriracha sauce</a>:</p>\n        <blockquote>It can be recognized by its bright red color and its packaging: a clear plastic bottle with a green cap, text in Vietnamese, English, Chinese, French, and Spanish, and the rooster logo. David Tran was born in 1945, the Year of the Rooster...<blockquote>\n    ",
     })
-], AppComponet);
-exports.AppComponet = AppComponet;
+], AboutComponent);
+exports.AboutComponent = AboutComponent;
 //# sourceMappingURL=about.component.js.map

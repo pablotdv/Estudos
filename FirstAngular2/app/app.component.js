@@ -9,19 +9,14 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var core_1 = require("@angular/core");
 var AppComponent = (function () {
     function AppComponent() {
-        this.food = 'kielbasa';
     }
-    AppComponent.prototype.foodInput = function (event) {
-        var target = event.target;
-        this.food = target.value;
-    };
     return AppComponent;
 }());
 AppComponent = __decorate([
     core_1.Component({
         moduleId: module.id,
         selector: 'my-app',
-        template: "\n        <input type=\"text\" [value]=\"food\" (input)=\"foodInput($event)\"/>\n        <p>Sriracha sauce is great with {{ food }}</p>\n    ",
+        template: "\n        <nav>\n            <a routerLink=\"/pairing\">Pairing</a> | \n            <a routerLink=\"/about\">About</a>            \n        </nav>\n        <router-outlet></router-outlet>\n    ",
     })
 ], AppComponent);
 exports.AppComponent = AppComponent;
