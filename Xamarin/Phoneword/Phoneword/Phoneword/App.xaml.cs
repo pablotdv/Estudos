@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 
 using Xamarin.Forms;
 
@@ -9,11 +6,13 @@ namespace Phoneword
 {
     public partial class App : Application
     {
+        public static IList<string> PhoneNumbers { get; set; }
+
         public App()
         {
             InitializeComponent();
-
-            MainPage = new Phoneword.MainPage();
+            PhoneNumbers = new List<string>();
+            MainPage = new NavigationPage(new Phoneword.MainPage());
         }
 
         protected override void OnStart()
