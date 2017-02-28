@@ -15,6 +15,15 @@ namespace FormsGallery
         public MasterDetailPageDemoPage()
         {
             InitializeComponent();
+
+            masterPage.NamedColors.ItemSelected += NamedColors_ItemSelected;            
+        }
+
+        private void NamedColors_ItemSelected(object sender, SelectedItemChangedEventArgs e)
+        {
+            this.Detail.BindingContext = e.SelectedItem;
+
+            this.IsPresented = false;
         }
     }
 }

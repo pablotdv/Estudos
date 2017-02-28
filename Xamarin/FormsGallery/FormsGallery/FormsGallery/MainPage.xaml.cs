@@ -9,16 +9,21 @@ namespace FormsGallery
     {
         
         public MainPage()
-        {            
+        {
             InitializeComponent();
 
-            NavigateCommand = new Command<Type>(async (Type pageType) =>
+            NavigateCommand = new Command<Type>(OpenPage());
+
+            BindingContext = this;
+        }
+
+        private Action<Type> OpenPage()
+        {
+            return async (Type pageType) =>
             {
                 Page page = (Page)Activator.CreateInstance(pageType);
                 await Navigation.PushAsync(page);
-            });
-
-            BindingContext = this;
+            };
         }
 
         public ICommand NavigateCommand { private set; get; }
