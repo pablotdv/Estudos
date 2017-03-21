@@ -10,5 +10,9 @@ namespace VSMMvcTDD.Services
     public interface IContactService
     {
         IEnumerable<Contact> GetAllContacts();
+        int AddContact(Contact contact);
+        Contact GetContact(int id);
+        void EditContact(Contact contact);
+        void DeleteContact(int id);
     }
 }

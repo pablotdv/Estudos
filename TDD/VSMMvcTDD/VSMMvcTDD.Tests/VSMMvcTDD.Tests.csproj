@@ -37,6 +37,14 @@
       <HintPath>..\packages\Castle.Core.4.0.0\lib\net45\Castle.Core.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Grid.Mvc.Ajax, Version=1.0.2.4, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Grid.Mvc.Ajax.1.0.31\lib\Grid.Mvc.Ajax.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="GridMvc, Version=2.0.4.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Grid.Mvc.Redux.1.0.4\lib\GridMvc.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
     <Reference Include="Moq, Version=4.7.1.0, Culture=neutral, PublicKeyToken=69f491c39445e920, processorArchitecture=MSIL">
@@ -97,6 +105,7 @@
     <Content Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Grid.Mvc.Ajax.readme" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>

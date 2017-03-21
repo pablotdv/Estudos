@@ -10,6 +10,7 @@ using Moq;
 using VSMMvcTDD.Services;
 using VSMMvcTDD.Entities;
 using VSMMvcTDD.Models;
+using Grid.Mvc.Ajax.GridExtensions;
 
 namespace VSMMvcTDD.Tests.Controllers
 {
@@ -17,6 +18,8 @@ namespace VSMMvcTDD.Tests.Controllers
     public class HomeControllerTest
     {
         private Mock<IContactService> _mockContactService;
+        private Mock<IAjaxGridFactory> _mockAjaxGridFactory;
+        private const int _partitionSize = 10;
         private HomeController _controller;
 
         [TestInitialize]
@@ -51,33 +54,185 @@ namespace VSMMvcTDD.Tests.Controllers
                     LastName = "Doe",
                     Email = "janedoe@email.com",
                 }
-            };
+            }.AsQueryable();
 
-            _mockContactService.Setup(x => x.GetAllContacts()).Returns(stubContacts);
-            var expectedModel = new List<ContactViewModel>();
-            foreach (var stubContact in stubContacts)
+            var expectedGridRow = new ContactViewModel()
             {
-                expectedModel.Add(new ContactViewModel()
-                {
-                    Id = stubContact.Id,
-                    Email = stubContact.Email,
-                    FirstName = stubContact.FirstName,
-                    LastName = stubContact.LastName,
-                });
-            }
+                Id = stubContacts.ToList()[1].Id,
+                Email = stubContacts.ToList()[1].Email,
+                FirstName = stubContacts.ToList()[1].FirstName,
+                LastName = stubContacts.ToList()[1].LastName
+            };
+            _mockContactService.Setup(x => x.GetAllContacts()).Returns(stubContacts);
+            _mockAjaxGridFactory.Setup(x =>
+                x.CreateAjaxGrid(It.Is<IQueryable<ContactViewModel>>(c => c.First() == expectedGridRow), 1, false, _partitionSize));
 
             var result = _controller.Index() as ViewResult;
+        }
 
-            var actualModel = result.Model as List<ContactViewModel>;
-
-            for (int i = 0; i < expectedModel.Count; i++)
+        [TestMethod]
+        public void ContactsGrid_Given_page_and_renderRowsOnly_ExpectJsonResultReturned()
+        {
+            int? page = 1;
+            bool renderRowsOnly = false;
+            var stubContacts = (new List<Contact>
             {
-                Assert.AreEqual(expectedModel[i].Id, actualModel[i].Id);
-                Assert.AreEqual(expectedModel[i].Email, actualModel[i].Email);
-                Assert.AreEqual(expectedModel[i].FirstName, actualModel[i].FirstName);
-                Assert.AreEqual(expectedModel[i].LastName, actualModel[i].LastName);
-            }
-        }        
+                new Contact()
+                {
+                    Id = 1,
+                    FirstName = "John",
+                    LastName = "Doe",
+                    Email = "johndoe@email.com"
+                },
+            }).AsQueryable();
+            _mockContactService.Setup(x => x.GetAllContacts()).Returns(stubContacts);
+            var expectedGridRow = new ContactViewModel()
+            {
+                Id = stubContacts.First().Id,
+                Email = stubContacts.First().Email,
+                FirstName = stubContacts.First().FirstName,
+                LastName = stubContacts.First().LastName
+            };
+            var stubAjaxGrid = new Mock<IAjaxGrid>();
+            _mockAjaxGridFactory.Setup(
+              x =>
+                x.CreateAjaxGrid(It.Is<IQueryable<ContactViewModel>>(c => c.First() == expectedGridRow), page.Value,
+                  renderRowsOnly, _partitionSize)).Returns(stubAjaxGrid.Object);
+            string stubGridHtml = "grid";
+            stubAjaxGrid.Setup(x => x.ToJson("_ContactsGrid", _controller)).Returns(stubGridHtml);
+            bool hasItems = true;
+            stubAjaxGrid.Setup(x => x.HasItems).Returns(hasItems);
+            string expectedData = "{ Html = grid, HasItems = True }";
+
+            var actual = _controller.ContactsGrid(page, renderRowsOnly);
+
+            Assert.AreEqual(expectedData, actual.Data.ToString());
+        }
+
+        [TestMethod]
+        public void Create_ExpectPartialViewResultReturned()
+        {
+            var actual = _controller.Create() as ViewResult;
+            var actualModel = actual.Model as ContactViewModel;
+            Assert.IsNotNull(actualModel);
+        }
+
+        [TestMethod]
+        public void Create_Given_Valid_Model_ExpectRecordSavedAndJsonSuccessReturned()
+        {
+            var model = new ContactViewModel()
+            {
+                FirstName = "John",
+                LastName = "Doe",
+                Email = "test@test.com"
+            };
+            const int stubId = 1;
+            _mockContactService.Setup(x => x.AddContact(It.Is<Contact>(c => c.FirstName == model.FirstName
+                                                                            && c.LastName == model.LastName &&
+                                                                            c.Email == model.Email))).Returns(stubId);
+            const string expected = "{ Success = True, Object = 1 }";
+            var actual = _controller.Create(model) as JsonResult;
+
+            Assert.AreEqual(expected, actual.Data.ToString());
+        }
+
+        [TestMethod]
+        public void Create_Given_InvalidModelState_ExpectPartialResultReturned()
+        {
+            var model = new ContactViewModel()
+            {
+                FirstName = "John",
+                LastName = "Doe",
+                Email = "test@test.com"
+            };
+            _controller.ModelState.AddModelError("", "error");
+            string expectedView = "_Create";
+
+            var actual = _controller.Create(model) as PartialViewResult;
+
+            Assert.AreEqual(expectedView, actual.ViewName);
+            Assert.AreEqual(model, actual.Model);
+        }
+
+        [TestMethod]
+        public void Edit_Given_id_ExpectPartialViewResultReturned()
+        {
+            int id = 1;
+            string expectedView = "_Edit";
+            var stubContact = new Contact()
+            {
+                Id = 1,
+                FirstName = "John",
+                LastName = "Doe",
+                Email = "johndoe@email.com"
+            };
+            _mockContactService.Setup(x => x.GetContact(id)).Returns(stubContact);
+            var expectedVm = new ContactViewModel()
+            {
+                Id = stubContact.Id,
+                FirstName = stubContact.FirstName,
+                LastName = stubContact.LastName,
+                Email = stubContact.Email
+            };
+
+            var actual = _controller.Edit(id) as PartialViewResult;
+            var actualVm = actual.Model as ContactViewModel;
+
+            Assert.AreEqual(expectedView, actual.ViewName);
+            Assert.AreEqual(expectedVm.Email, actualVm.Email);
+            Assert.AreEqual(expectedVm.FirstName, actualVm.FirstName);
+            Assert.AreEqual(expectedVm.Id, actualVm.Id);
+            Assert.AreEqual(expectedVm.LastName, actualVm.LastName);
+        }
+
+        [TestMethod]
+        public void Edit_Given_Valid_Model_ExpectModelUpdatedAndJsonSuccessReturned()
+        {
+            var model = new ContactViewModel()
+            {
+                Id = 1,
+                FirstName = "John",
+                LastName = "Doe",
+                Email = "test@test.com"
+            };
+            _mockContactService.Setup(x => x.EditContact(It.Is<Contact>(c => c.Id == model.Id &&
+                                                        c.FirstName == model.FirstName
+                                                        && c.LastName == model.LastName &&
+                                                        c.Email == model.Email)));
+            var expected = "{ Success = True }";
+            var actual = _controller.Edit(model) as JsonResult;
+
+            Assert.AreEqual(expected, actual.Data.ToString());
+        }
+
+        [TestMethod]
+        public void Edit_Given_InvalidModelState_ExpectPartialResultReturned()
+        {
+            var model = new ContactViewModel()
+            {
+                FirstName = "John",
+                LastName = "Doe",
+                Email = "test@test.com"
+            };
+            _controller.ModelState.AddModelError("", "error");
+            string expectedView = "_Edit";
+
+            var actual = _controller.Edit(model) as PartialViewResult;
+
+            Assert.AreEqual(expectedView, actual.ViewName);
+            Assert.AreEqual(model, actual.Model);
+        }
+
+        [TestMethod]
+        public void Delete_Given_id_ExpectJsonSuccessReturned()
+        {
+            int id = 1;
+            _mockContactService.Setup(x => x.DeleteContact(id));
+            const string expected = "{ Success = True }";
+            var actual = _controller.Delete(id);
+
+            Assert.AreEqual(expected, actual.Data.ToString());
+        }
 
         [TestMethod]
         public void About()
