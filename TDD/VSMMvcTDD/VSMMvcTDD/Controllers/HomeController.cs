@@ -1,10 +1,10 @@
-﻿using Grid.Mvc.Ajax.GridExtensions;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using System.Web.Mvc;
+using Grid.Mvc.Ajax.GridExtensions;
 using VSMMvcTDD.Entities;
+using VSMMvcTDD.GridExtensions;
 using VSMMvcTDD.Models;
 using VSMMvcTDD.Services;
 
@@ -12,24 +12,23 @@ namespace VSMMvcTDD.Controllers
 {
     public class HomeController : Controller
     {
-        private IContactService _contactService;
-        private IAjaxGridFactory _ajaxGridFactory;
+        private readonly IContactService _contactService;
+        private readonly IAjaxGridFactory _ajaxGridFactory;
+        private const int _partitionSize = 10;
 
-        public HomeController(IContactService contactService)
+        public HomeController(IContactService contactService,
+            IAjaxGridFactory ajaxGridFactory)
         {
-            this._contactService = contactService;
+            _contactService = contactService;
+            _ajaxGridFactory = ajaxGridFactory;
         }
 
-        public HomeController()
-        {
-        }
-
+        [HttpGet]
         public ActionResult Index()
         {
-            int _partitionSize = 10;
             var contacts = _contactService.GetAllContacts();
             var model = new ContactIndexModel();
-            var gridData = (from contact in contacts
+            var gridData = from contact in contacts
                            orderby contact.LastName, contact.FirstName
                            select new ContactViewModel()
                            {
@@ -37,7 +36,7 @@ namespace VSMMvcTDD.Controllers
                                Email = contact.Email,
                                FirstName = contact.FirstName,
                                LastName = contact.LastName
-                           }).AsQueryable();
+                           };
             var grid = _ajaxGridFactory.CreateAjaxGrid(gridData, 1, false, _partitionSize);
             model.Contacts = grid as AjaxGrid<ContactViewModel>;
             return View(model);
@@ -46,7 +45,23 @@ namespace VSMMvcTDD.Controllers
         [HttpGet]
         public JsonResult ContactsGrid(int? page, bool? renderRowsOnly)
         {
-            throw new NotImplementedException();
+            var contacts = _contactService.GetAllContacts();
+            var gridData = from contact in contacts
+                           orderby contact.LastName, contact.FirstName
+                           select new ContactViewModel()
+                           {
+                               Id = contact.Id,
+                               Email = contact.Email,
+                               FirstName = contact.FirstName,
+                               LastName = contact.LastName
+                           };
+            var model = _ajaxGridFactory.CreateAjaxGrid(gridData.AsQueryable(), page ?? 1,
+                renderRowsOnly ?? page.HasValue, _partitionSize);
+            return Json(new
+            {
+                Html = model.ToJson("_ContactsGrid", this),
+                model.HasItems
+            }, JsonRequestBehavior.AllowGet);
         }
 
         [HttpGet]
@@ -72,6 +87,7 @@ namespace VSMMvcTDD.Controllers
             return PartialView("_Create", model);
         }
 
+
         [HttpGet]
         public ActionResult Edit(int id)
         {
@@ -85,6 +101,7 @@ namespace VSMMvcTDD.Controllers
             };
             return PartialView("_Edit", model);
         }
+
 
         [HttpPut]
         public ActionResult Edit(ContactViewModel model)
@@ -108,20 +125,6 @@ namespace VSMMvcTDD.Controllers
         {
             _contactService.DeleteContact(id);
             return Json(new { Success = true }, JsonRequestBehavior.AllowGet);
-        }
-
-        public ActionResult About()
-        {
-            ViewBag.Message = "Your application description page.";
-
-            return View();
-        }
-
-        public ActionResult Contact()
-        {
-            ViewBag.Message = "Your contact page.";
-
-            return View();
         }
     }
 }

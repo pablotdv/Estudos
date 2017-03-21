@@ -1,16 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Web.Mvc;
+using Grid.Mvc.Ajax.GridExtensions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using VSMMvcTDD;
-using VSMMvcTDD.Controllers;
 using Moq;
-using VSMMvcTDD.Services;
+using VSMMvcTDD.Controllers;
 using VSMMvcTDD.Entities;
 using VSMMvcTDD.Models;
-using Grid.Mvc.Ajax.GridExtensions;
+using VSMMvcTDD.Services;
 
 namespace VSMMvcTDD.Tests.Controllers
 {
@@ -18,63 +15,28 @@ namespace VSMMvcTDD.Tests.Controllers
     public class HomeControllerTest
     {
         private Mock<IContactService> _mockContactService;
+        private HomeController _controller;
         private Mock<IAjaxGridFactory> _mockAjaxGridFactory;
         private const int _partitionSize = 10;
-        private HomeController _controller;
 
         [TestInitialize]
-        public void Initialize()
+        public void TestInitialize()
         {
             _mockContactService = new Mock<IContactService>();
-            _controller = new HomeController(_mockContactService.Object);
+            _mockAjaxGridFactory = new Mock<IAjaxGridFactory>();
+            _controller = new HomeController(_mockContactService.Object, _mockAjaxGridFactory.Object);
         }
 
         [TestCleanup]
         public void TestCleanup()
         {
             _mockContactService.VerifyAll();
+            _mockAjaxGridFactory.VerifyAll();
         }
 
         [TestMethod]
         public void Index_ExpectViewResultReturned()
         {
-            var stubContacts = new List<Contact>()
-            {
-                new Contact()
-                {
-                    Id= 1,
-                    FirstName = "John",
-                    LastName = "Doe",
-                    Email = "johndoe@email.com",
-                },
-                new Contact()
-                {
-                    Id = 2,
-                    FirstName = "Jane",
-                    LastName = "Doe",
-                    Email = "janedoe@email.com",
-                }
-            }.AsQueryable();
-
-            var expectedGridRow = new ContactViewModel()
-            {
-                Id = stubContacts.ToList()[1].Id,
-                Email = stubContacts.ToList()[1].Email,
-                FirstName = stubContacts.ToList()[1].FirstName,
-                LastName = stubContacts.ToList()[1].LastName
-            };
-            _mockContactService.Setup(x => x.GetAllContacts()).Returns(stubContacts);
-            _mockAjaxGridFactory.Setup(x =>
-                x.CreateAjaxGrid(It.Is<IQueryable<ContactViewModel>>(c => c.First() == expectedGridRow), 1, false, _partitionSize));
-
-            var result = _controller.Index() as ViewResult;
-        }
-
-        [TestMethod]
-        public void ContactsGrid_Given_page_and_renderRowsOnly_ExpectJsonResultReturned()
-        {
-            int? page = 1;
-            bool renderRowsOnly = false;
             var stubContacts = (new List<Contact>
             {
                 new Contact()
@@ -84,37 +46,40 @@ namespace VSMMvcTDD.Tests.Controllers
                     LastName = "Doe",
                     Email = "johndoe@email.com"
                 },
+                new Contact()
+                {
+                    Id = 2,
+                    FirstName = "Jane",
+                    LastName = "Doe",
+                    Email = "janedoe@email.com"
+                }
             }).AsQueryable();
-            _mockContactService.Setup(x => x.GetAllContacts()).Returns(stubContacts);
             var expectedGridRow = new ContactViewModel()
             {
-                Id = stubContacts.First().Id,
-                Email = stubContacts.First().Email,
-                FirstName = stubContacts.First().FirstName,
-                LastName = stubContacts.First().LastName
+                Id = stubContacts.ToList()[1].Id,
+                Email = stubContacts.ToList()[1].Email,
+                FirstName = stubContacts.ToList()[1].FirstName,
+                LastName = stubContacts.ToList()[1].LastName
             };
-            var stubAjaxGrid = new Mock<IAjaxGrid>();
+            _mockContactService.Setup(x => x.GetAllContacts()).Returns(stubContacts);
             _mockAjaxGridFactory.Setup(
-              x =>
-                x.CreateAjaxGrid(It.Is<IQueryable<ContactViewModel>>(c => c.First() == expectedGridRow), page.Value,
-                  renderRowsOnly, _partitionSize)).Returns(stubAjaxGrid.Object);
-            string stubGridHtml = "grid";
-            stubAjaxGrid.Setup(x => x.ToJson("_ContactsGrid", _controller)).Returns(stubGridHtml);
-            bool hasItems = true;
-            stubAjaxGrid.Setup(x => x.HasItems).Returns(hasItems);
-            string expectedData = "{ Html = grid, HasItems = True }";
+                x =>
+                    x.CreateAjaxGrid(It.Is<IQueryable<ContactViewModel>>(c => c.First() == expectedGridRow), 1,
+                        false, _partitionSize));
 
-            var actual = _controller.ContactsGrid(page, renderRowsOnly);
-
-            Assert.AreEqual(expectedData, actual.Data.ToString());
+            var result = _controller.Index() as ViewResult;
         }
 
         [TestMethod]
         public void Create_ExpectPartialViewResultReturned()
         {
-            var actual = _controller.Create() as ViewResult;
+            string expectedView = "_Create";
+
+            var actual = _controller.Create() as PartialViewResult;
             var actualModel = actual.Model as ContactViewModel;
+
             Assert.IsNotNull(actualModel);
+            Assert.AreEqual(expectedView, actual.ViewName);
         }
 
         [TestMethod]
@@ -205,6 +170,7 @@ namespace VSMMvcTDD.Tests.Controllers
             Assert.AreEqual(expected, actual.Data.ToString());
         }
 
+
         [TestMethod]
         public void Edit_Given_InvalidModelState_ExpectPartialResultReturned()
         {
@@ -235,29 +201,42 @@ namespace VSMMvcTDD.Tests.Controllers
         }
 
         [TestMethod]
-        public void About()
+        public void ContactsGrid_Given_page_and_renderRowsOnly_ExpectJsonResultReturned()
         {
-            // Arrange
-            HomeController controller = new HomeController();
+            int? page = 1;
+            bool renderRowsOnly = false;
+            var stubContacts = (new List<Contact>
+            {
+                new Contact()
+                {
+                    Id = 1,
+                    FirstName = "John",
+                    LastName = "Doe",
+                    Email = "johndoe@email.com"
+                },
+            }).AsQueryable();
+            _mockContactService.Setup(x => x.GetAllContacts()).Returns(stubContacts);
+            var expectedGridRow = new ContactViewModel()
+            {
+                Id = stubContacts.First().Id,
+                Email = stubContacts.First().Email,
+                FirstName = stubContacts.First().FirstName,
+                LastName = stubContacts.First().LastName
+            };
+            var stubAjaxGrid = new Mock<IAjaxGrid>();
+            _mockAjaxGridFactory.Setup(
+                x =>
+                    x.CreateAjaxGrid(It.Is<IQueryable<ContactViewModel>>(c => c.First() == expectedGridRow), page.Value,
+                        renderRowsOnly, _partitionSize)).Returns(stubAjaxGrid.Object);
+            string stubGridHtml = "grid";
+            stubAjaxGrid.Setup(x => x.ToJson("_ContactsGrid", _controller)).Returns(stubGridHtml);
+            bool hasItems = true;
+            stubAjaxGrid.Setup(x => x.HasItems).Returns(hasItems);
+            string expectedData = "{ Html = grid, HasItems = True }";
 
-            // Act
-            ViewResult result = controller.About() as ViewResult;
+            var actual = _controller.ContactsGrid(page, renderRowsOnly);
 
-            // Assert
-            Assert.AreEqual("Your application description page.", result.ViewBag.Message);
-        }
-
-        [TestMethod]
-        public void Contact()
-        {
-            // Arrange
-            HomeController controller = new HomeController();
-
-            // Act
-            ViewResult result = controller.Contact() as ViewResult;
-
-            // Assert
-            Assert.IsNotNull(result);
+            Assert.AreEqual(expectedData, actual.Data.ToString());
         }
     }
 }

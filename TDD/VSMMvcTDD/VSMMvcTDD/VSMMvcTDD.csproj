@@ -210,6 +210,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="GridExtensions\IAjaxGrid.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\ContactIndexModel.cs" />
     <Compile Include="Models\ContactViewModel.cs" />
@@ -297,6 +298,12 @@
     <Content Include="Views\Shared\_GridPager.cshtml" />
     <Content Include="Views\Shared\_Grid.cshtml" />
     <Content Include="Views\Shared\_AjaxGridPager.cshtml" />
+    <Content Include="Views\Home\_ContactsGrid.cshtml" />
+    <Content Include="Views\Home\_Create.cshtml" />
+    <Content Include="Views\Home\_Delete.cshtml" />
+    <Content Include="Views\Home\_Edit.cshtml" />
+    <Content Include="Views\Home\DisplayTemplates\ContactViewModel.cshtml" />
+    <Content Include="Views\Home\EditorTemplates\ContactViewModel.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
