@@ -12,6 +12,8 @@ using Microsoft.Extensions.Logging;
 using WebCore.Data;
 using WebCore.Models;
 using WebCore.Services;
+using WebCore.Services.Impl;
+using WebCore.Services.Spec;
 
 namespace WebCore
 {
@@ -52,6 +54,7 @@ namespace WebCore
             // Add application services.
             services.AddTransient<IEmailSender, AuthMessageSender>();
             services.AddTransient<ISmsSender, AuthMessageSender>();
+            services.AddTransient<IBlogService, BlogService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

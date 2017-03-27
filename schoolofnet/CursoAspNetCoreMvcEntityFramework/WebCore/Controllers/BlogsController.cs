@@ -7,34 +7,36 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using WebCore.Data;
 using WebCore.Models.ManageBlog;
+using WebCore.Services.Spec;
 
 namespace WebCore.Controllers
 {
     public class BlogsController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly IBlogService _service;
 
-        public BlogsController(ApplicationDbContext context)
+        public BlogsController(ApplicationDbContext context, IBlogService service)
         {
-            _context = context;    
+            _context = context;
+            _service = service;
         }
 
-        // GET: Blogs
-        public async Task<IActionResult> Index()
+        // GET: Blogs        
+        public IActionResult Index()
         {
-            return View(await _context.Blog.ToListAsync());
+            return View(_service.Listar());
         }
 
         // GET: Blogs/Details/5
-        public async Task<IActionResult> Details(int? id)
+        public IActionResult Details(int? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var blog = await _context.Blog
-                .SingleOrDefaultAsync(m => m.ID == id);
+            var blog = _service.Obter(id.Value);
             if (blog == null)
             {
                 return NotFound();
@@ -54,26 +56,25 @@ namespace WebCore.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ID,Tilulo,Resumo,Url,Autor")] Blog blog)
+        public IActionResult Create([Bind("ID,Tilulo,Resumo,Url,Autor")] Blog blog)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(blog);
-                await _context.SaveChangesAsync();
+                _service.Salvar(blog);
                 return RedirectToAction("Index");
             }
             return View(blog);
         }
 
         // GET: Blogs/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+        public IActionResult Edit(int? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var blog = await _context.Blog.SingleOrDefaultAsync(m => m.ID == id);
+            var blog = _service.Obter(id.Value);
             if (blog == null)
             {
                 return NotFound();
@@ -86,7 +87,7 @@ namespace WebCore.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ID,Tilulo,Resumo,Url,Autor")] Blog blog)
+        public IActionResult Edit(int id, [Bind("ID,Tilulo,Resumo,Url,Autor")] Blog blog)
         {
             if (id != blog.ID)
             {
@@ -97,12 +98,11 @@ namespace WebCore.Controllers
             {
                 try
                 {
-                    _context.Update(blog);
-                    await _context.SaveChangesAsync();
+                    _service.Salvar(blog);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!BlogExists(blog.ID))
+                    if (_service.Obter(id) == null)
                     {
                         return NotFound();
                     }
@@ -117,15 +117,14 @@ namespace WebCore.Controllers
         }
 
         // GET: Blogs/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+        public IActionResult Delete(int? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var blog = await _context.Blog
-                .SingleOrDefaultAsync(m => m.ID == id);
+            var blog = _service.Obter(id.Value);
             if (blog == null)
             {
                 return NotFound();
@@ -137,17 +136,10 @@ namespace WebCore.Controllers
         // POST: Blogs/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public IActionResult DeleteConfirmed(int id)
         {
-            var blog = await _context.Blog.SingleOrDefaultAsync(m => m.ID == id);
-            _context.Blog.Remove(blog);
-            await _context.SaveChangesAsync();
+            _service.Deletar(id);
             return RedirectToAction("Index");
-        }
-
-        private bool BlogExists(int id)
-        {
-            return _context.Blog.Any(e => e.ID == id);
         }
     }
 }
