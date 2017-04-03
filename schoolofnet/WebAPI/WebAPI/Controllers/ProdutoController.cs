@@ -32,7 +32,7 @@ namespace WebAPI.Controllers
             if (produto == null)
                 return NotFound();
 
-            return Ok(produto);
+            return Json(produto);
         }
 
         public IEnumerable<Produto> GetPorCategoria(string categoria)
