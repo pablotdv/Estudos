@@ -1,12 +1,12 @@
 <?php
 
-$input = array(22,34,17,18,14,13,22,25);
-$filtro = function(int $age) {
-    return ($age >= 18);
-};
+class People 
+{
+    public function getHello($name) 
+    {
+        return "Hello {$name}!";
+    }
+}
 
-$output = array_filter($input, function(int $age) {
-    return ($age >= 18);
-});
-
-print_r($output);
+$p = new People;
+echo $p->getHello("Pablo T de Vargas");
