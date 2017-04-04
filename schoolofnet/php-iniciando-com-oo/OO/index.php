@@ -12,4 +12,6 @@ $mustang->brand = "Mustang";
 $mustang->color = "Yellow";
 $mustang->engine = 300;
 
-var_dump($mustang);
+// var_dump($ferrari);
+// var_dump($mustang);
+echo $mustang->getEngine();
