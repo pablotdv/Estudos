@@ -81,6 +81,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Controllers\PessoaControllerTeste.cs" />
     <Compile Include="FibonacciTest.cs" />
     <Compile Include="PessoaTeste.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

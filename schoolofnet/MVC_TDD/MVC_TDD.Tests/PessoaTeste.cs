@@ -28,7 +28,7 @@ namespace MVC_TDD.Tests
         [TestMethod]
         public void CPFDeveSerValido()
         {
-            string cpf = "99999999999";
+            //string cpf = "99999999999";
         }
     }
 }
