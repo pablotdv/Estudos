@@ -14,4 +14,6 @@ $mustang->engine = 300;
 
 // var_dump($ferrari);
 // var_dump($mustang);
-echo $mustang->getEngine();
+echo $mustang->getEngine("HP");
+echo "<br>";
+echo $ferrari->getEngine();
