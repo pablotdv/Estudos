@@ -4,5 +4,15 @@ require_once("Vehicle.php");
 
 class Car extends Vehicle
 {
-    public $doors;
+    private $doors;
+
+    public function setDoors($doors)
+    {
+        $this->doors = $doors;
+    }
+
+    public function getDoors()
+    {
+        return $this->doors;
+    }
 }

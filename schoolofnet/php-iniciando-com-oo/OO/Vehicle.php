@@ -3,7 +3,7 @@
 class Vehicle
 {
     public $brand;
-    public $color;
+    protected $color;
     public $engine;
 
     public function __construct($brand = null, $color = null)
