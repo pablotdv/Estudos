@@ -1,6 +1,8 @@
 <?php
 
-abstract class Vehicle
+require_once("IVehicle.php");
+
+abstract class Vehicle implements IVehicle
 {
     public $brand;
     protected $color;
@@ -18,4 +20,9 @@ abstract class Vehicle
     }
 
     abstract public function getBrand();
+
+    public function getColor()
+    {
+        return $this->color;
+    }
 }

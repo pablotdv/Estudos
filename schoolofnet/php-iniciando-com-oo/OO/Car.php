@@ -14,8 +14,7 @@ class Car extends Vehicle
     public function getDoors()
     {
         return $this->doors;
-    }
-    
+    }    
 
     public function getBrand()
     {
