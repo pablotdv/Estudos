@@ -16,4 +16,4 @@ $motor->brand = "Honda";
 $motor->color = "Blue";
 $motor->engine = 150;
 
-echo $motor->brand;
+echo $motor->getBrand();
