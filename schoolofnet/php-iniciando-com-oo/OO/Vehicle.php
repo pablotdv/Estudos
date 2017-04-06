@@ -1,6 +1,6 @@
 <?php
 
-class Vehicle
+abstract class Vehicle
 {
     public $brand;
     protected $color;
@@ -16,4 +16,6 @@ class Vehicle
     {
         return "{$this->engine} {$type}";
     }
+
+    abstract public function getBrand();
 }

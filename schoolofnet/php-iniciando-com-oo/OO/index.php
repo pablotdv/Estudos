@@ -14,4 +14,4 @@ $mustang->setDoors(4);
 $motor = new Motorcycle("Honda", "Blue");
 $motor->engine = 150;
 
-echo $motor->brand;
+echo $motor->getBrand();
