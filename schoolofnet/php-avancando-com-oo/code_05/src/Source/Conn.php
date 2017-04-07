@@ -1,6 +1,6 @@
 <?php
 
-require_once("IConn.php");
+namespace Source;
 
 class Conn implements IConn
 {
