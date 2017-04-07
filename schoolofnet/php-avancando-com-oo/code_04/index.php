@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 require_once("IConn.php");
 require_once("Product.php");
