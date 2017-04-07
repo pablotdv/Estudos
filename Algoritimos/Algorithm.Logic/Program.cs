@@ -38,7 +38,28 @@ namespace Algorithm.Logic
         public static string Evaluate(string input)
         {
             // TODO: Este método é o ponto de entrada para a lógica.
-            return "(X, Y)";
+
+            if (string.IsNullOrWhiteSpace(input))
+                return "(999, 999)";
+
+            int norte, sul, leste, oeste;
+            norte = sul = leste = oeste = 0;
+            for (int i = 0; i < input.Length; i++)
+            {
+                if (input[i] == 'N')
+                    norte++;
+                else if (input[i] == 'L')
+                    leste++;
+                else if (input[i] == 'S')
+                    sul--;
+                else if (input[i] == 'O')
+                    oeste--;
+            }
+
+            int y = norte + sul;
+            int x = leste + oeste;
+
+            return $"({x}, {y})";
         }
     }
 }
