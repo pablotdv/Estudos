@@ -2,6 +2,9 @@
 namespace Algorithm.Logic
 {
     using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Text.RegularExpressions;
 
     public class Program
     {
@@ -39,27 +42,104 @@ namespace Algorithm.Logic
         {
             // TODO: Este método é o ponto de entrada para a lógica.
 
-            if (string.IsNullOrWhiteSpace(input))
+            if (IsInvalid(input))
                 return "(999, 999)";
 
             int norte, sul, leste, oeste;
             norte = sul = leste = oeste = 0;
-            for (int i = 0; i < input.Length; i++)
+
+            List<string> comandos = new List<string>();
+
+            Parse(input, comandos);
+
+            foreach (var comando in comandos)
             {
-                if (input[i] == 'N')
+                string valor = Regex.Match(comando, @"\d+").Value;
+                int numero = 0;
+
+                int.TryParse(valor, out numero);
+
+                if (numero >= 2147483647)
+                    return "(999, 999)";
+
+                if (comando.StartsWith("N"))
+                {
                     norte++;
-                else if (input[i] == 'L')
-                    leste++;
-                else if (input[i] == 'S')
+                    if (numero != 0)
+                        norte += numero - 1;
+                }
+                else if (comando.StartsWith("S"))
+                {
                     sul--;
-                else if (input[i] == 'O')
+                    if (numero != 0)
+                        sul += numero * -1 + 1;
+                }
+                else if (comando.StartsWith("L"))
+                {
+                    leste++;
+                    if (numero != 0)
+                        leste += numero - 1;
+                }
+                else if (comando.StartsWith("O"))
+                {
                     oeste--;
+                    if (numero != 0)
+                        oeste += numero * -1 + 1;
+                }
+
             }
 
             int y = norte + sul;
             int x = leste + oeste;
 
             return $"({x}, {y})";
+        }
+
+        /// <summary>
+        /// Convert o input em uma lista de comandos
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        public static void Parse(string input, List<string> comandos)
+        {
+            for (int i = 0; i < input.Length; i++)
+            {
+                string comando = input[i].ToString();
+
+                if (comando == "X")
+                {
+                    comandos.Remove(comandos.Last());
+                }
+                else if (Char.IsNumber(input[i]))
+                {
+                    var last = comandos.Last();
+                    last += input[i];
+
+                    comandos[comandos.Count - 1] = last;
+                }
+                else
+                {
+                    comandos.Add(comando);
+                }
+
+
+            }
+        }
+
+        /// <summary>
+        /// Verifica se a string é inválida
+        /// <para>Inválida quando: vázia, nula ou iniciar por números</para>
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        private static bool IsInvalid(string input)
+        {
+            return string.IsNullOrWhiteSpace(input) ||
+                   Regex.IsMatch(input, @"^\d+") ||
+                   input.EndsWith("I") ||
+
+                   (input.Contains("X") && !input.EndsWith("X") && Char.IsNumber(input[input.IndexOf("X")+1]))
+                   ;
         }
     }
 }
