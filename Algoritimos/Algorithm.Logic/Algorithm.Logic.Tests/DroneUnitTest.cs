@@ -44,6 +44,12 @@ namespace Algorithm.Logic.Tests
         }
 
         [TestMethod]
+        public void Input_NNX2LL()
+        {
+            Assert.AreEqual("(999, 999)", Program.Evaluate("NNX2LL"));
+        }
+
+        [TestMethod]
         public void Input_N123LSX()
         {
             Assert.AreEqual("(1, 123)", Program.Evaluate("N123LSX"));
@@ -113,6 +119,12 @@ namespace Algorithm.Logic.Tests
         public void Input_NNI()
         {
             Assert.AreEqual("(999, 999)", Program.Evaluate("NNI")); // Commando inválido
+        }
+
+        [TestMethod]
+        public void Input_NNC()
+        {
+            Assert.AreEqual("(999, 999)", Program.Evaluate("NNC")); // Commando inválido
         }
 
         [TestMethod]

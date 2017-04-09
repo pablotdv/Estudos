@@ -134,12 +134,13 @@ namespace Algorithm.Logic
         /// <returns></returns>
         private static bool IsInvalid(string input)
         {
-            return string.IsNullOrWhiteSpace(input) ||
-                   Regex.IsMatch(input, @"^\d+") ||
-                   input.EndsWith("I") ||
+            string valid = "NSLOX0123456789";
 
-                   (input.Contains("X") && !input.EndsWith("X") && Char.IsNumber(input[input.IndexOf("X")+1]))
-                   ;
+
+            return string.IsNullOrWhiteSpace(input) ||
+               Regex.IsMatch(input, @"^\d+") ||               
+               (input.Contains("X") && !input.EndsWith("X") && Char.IsNumber(input[input.IndexOf("X") + 1])) ||
+               input.ToArray().Any(i => !valid.Contains(i));
         }
     }
 }
