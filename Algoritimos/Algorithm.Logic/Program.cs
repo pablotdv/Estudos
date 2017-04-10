@@ -51,7 +51,7 @@ namespace Algorithm.Logic
             List<string> comandos = new List<string>();
 
             Parse(input, comandos);
-
+            
             foreach (var comando in comandos)
             {
                 string valor = Regex.Match(comando, @"\d+").Value;
@@ -61,32 +61,30 @@ namespace Algorithm.Logic
 
                 if (numero >= 2147483647)
                     return "(999, 999)";
-
-                if (comando.StartsWith("N"))
+                
+                switch (comando[0])
                 {
-                    norte++;
-                    if (numero != 0)
-                        norte += numero - 1;
-                }
-                else if (comando.StartsWith("S"))
-                {
-                    sul--;
-                    if (numero != 0)
-                        sul += numero * -1 + 1;
-                }
-                else if (comando.StartsWith("L"))
-                {
-                    leste++;
-                    if (numero != 0)
-                        leste += numero - 1;
-                }
-                else if (comando.StartsWith("O"))
-                {
-                    oeste--;
-                    if (numero != 0)
-                        oeste += numero * -1 + 1;
-                }
-
+                    case 'N':
+                        norte++;
+                        if (numero != 0)
+                            norte += numero - 1;
+                        break;
+                    case 'S':
+                        sul--;
+                        if (numero != 0)
+                            sul += numero * -1 + 1;
+                        break;
+                    case 'L':
+                        leste++;
+                        if (numero != 0)
+                            leste += numero - 1;
+                        break;
+                    case 'O':
+                        oeste--;
+                        if (numero != 0)
+                            oeste += numero * -1 + 1;
+                        break;
+                }                
             }
 
             int y = norte + sul;
@@ -121,8 +119,6 @@ namespace Algorithm.Logic
                 {
                     comandos.Add(comando);
                 }
-
-
             }
         }
 
