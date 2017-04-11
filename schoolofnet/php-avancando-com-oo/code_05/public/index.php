@@ -5,6 +5,6 @@ require_once("config.php");
 require_once("service.php");
 
 
-$list = $container['product']->list();
+$list = $container['ServiceProduct']->list();
 
 var_dump($list);
