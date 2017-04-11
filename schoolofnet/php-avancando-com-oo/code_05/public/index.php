@@ -7,4 +7,4 @@ require_once("service.php");
 
 $list = $container['ServiceProduct']->list();
 
-var_dump($list);
+require_once("list.product.php");

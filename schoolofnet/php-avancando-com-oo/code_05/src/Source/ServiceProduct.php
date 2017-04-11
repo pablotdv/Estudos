@@ -10,7 +10,7 @@ class ServiceProduct implements IServiceProduct
     public function __construct(IConn $conn, IProduct $product)
     {
         $this->db = $conn->connect();
-        $this->db = $product;
+        $this->product = $product;
     }
 
     public function list()
