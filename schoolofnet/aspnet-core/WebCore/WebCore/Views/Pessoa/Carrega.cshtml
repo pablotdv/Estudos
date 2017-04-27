@@ -1,0 +1,42 @@
+@model IEnumerable<WebCore.Models.PessoaViewModels.Pessoa>
+
+@{
+    ViewData["Title"] = "Carrega";
+}
+
+<h2>Index</h2>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Nome)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DataNascimento)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Nome)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DataNascimento)
+                </td>
+                <td>
+                    <a asp-action="Edit">Edit</a> |
+                    <a asp-action="Details">Details</a> |
+                    <a asp-action="Delete">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
