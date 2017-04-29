@@ -59,7 +59,7 @@ namespace WebCore.Controllers
         // POST: PessoaRW/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id,[Bind("Nome,DataNascimento")] Pessoa pessoa)
+        public ActionResult Edit(Pessoa pessoa)
         {
             try
             {
