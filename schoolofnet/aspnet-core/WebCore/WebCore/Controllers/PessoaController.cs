@@ -7,13 +7,18 @@ using WebCore.Models.PessoaViewModels;
 
 namespace WebCore.Controllers
 {
+    [Route("Publish")]
     public class PessoaController : Controller
     {
+        [Route("")]
+        [Route("Coisa")]
+        [Route("IndexP")]
         public IActionResult Index()
         {            
             return View();
         }
 
+        [Route("DiferenteP")]
         public IActionResult Diferente()
         {
             Pessoa pessoa = new Pessoa()
@@ -24,12 +29,14 @@ namespace WebCore.Controllers
             return View(pessoa);
         }
 
+        [Route("TesteP")]
         public IActionResult Teste()
         {
             return View("Index");
         }
 
-        public IActionResult ViewModel()
+        [Route("ViewModelP")]
+        public IActionResult ViewModel(int? id)
         {
             Pessoa pessoa = new Pessoa()
             {
