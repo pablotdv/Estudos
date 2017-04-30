@@ -10,7 +10,7 @@ namespace WebCore.Models.PessoaViewModels
     public class Pessoa
     {
         [Required]
-        [MaxLength(30)]
+        [MaxLength(30, ErrorMessage ="Máximo de 30 caracteres")]
         [BindRequired]
         public string Nome { get; set; }
 
@@ -19,10 +19,12 @@ namespace WebCore.Models.PessoaViewModels
         [BindRequired]
         public String UltimoNome { get; set; }
 
-        public bool IsEstudante { get; set; }
-        
         [Required]
         [BindRequired]
         public DateTime DataNascimento { get; set; }
+
+        public bool IsEstudante { get; set; }
+
+        
     }
 }
