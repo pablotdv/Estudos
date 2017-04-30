@@ -15,7 +15,7 @@ namespace WebCore.Models.PessoaViewModels
         public string Nome { get; set; }
 
         [Required]
-        [MaxLength(30)]
+        [MaxLength(30, ErrorMessage = "Máximo de 30 caracteres")]
         [BindRequired]
         public String UltimoNome { get; set; }
 
@@ -25,6 +25,11 @@ namespace WebCore.Models.PessoaViewModels
 
         public bool IsEstudante { get; set; }
 
-        
+        //[Compare(nameof(Propriedade2))]
+        //public string Propriedade { get; set; }
+        //public string Propriedade2 { get; set; }
+
+        //[Range(0,100, ErrorMessage ="Valor deve estar entre 0 e 100.")]
+        //public decimal Numero { get; set; }
     }
 }

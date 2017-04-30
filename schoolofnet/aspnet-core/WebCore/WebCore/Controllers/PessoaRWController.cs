@@ -63,7 +63,10 @@ namespace WebCore.Controllers
         {
             try
             {
-                // TODO: Add update logic here
+                if (ModelState.IsValid)
+                {
+                    TryValidateModel(pessoa);//revalida o model
+                }
 
                 return RedirectToAction("Index");
             }
