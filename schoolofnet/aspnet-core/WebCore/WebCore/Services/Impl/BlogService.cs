@@ -11,40 +11,40 @@ namespace WebCore.Services.Impl
 {
     public class BlogService : IBlogService
     {
-        private ApplicationDbContext _db;
+        private readonly ApplicationDbContext _context;
 
-        public BlogService(ApplicationDbContext db)
+        public BlogService(ApplicationDbContext context)
         {
-            _db = db;
+            _context = context;
         }
 
         public void Salvar(Blog blog)
         {
             if (blog.ID > 0)
             {
-                _db.Blog.Attach(blog);
-                _db.Entry(blog).State = EntityState.Modified;
+                _context.Blog.Attach(blog);
+                _context.Entry(blog).State = EntityState.Modified;
             }
-            else _db.Blog.Add(blog);
+            else _context.Blog.Add(blog);
 
-            _db.SaveChanges();
+            _context.SaveChanges();
         }
 
         public Blog Obter(int id)
         {
-            return _db.Blog.Find(id);
+            return _context.Blog.Find(id);
         }
 
         public IEnumerable<Blog> Listar()
         {
-            return _db.Blog.ToList();
+            return _context.Blog.ToList();
         }
 
         public void Deletar(int id)
         {
-            var blog = _db.Blog.Find(id);
-            _db.Remove(blog);
-            _db.SaveChanges();
+            var blog = _context.Blog.Find(id);
+            _context.Remove(blog);
+            _context.SaveChanges();
         }
     }
 }
