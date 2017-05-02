@@ -14,18 +14,23 @@ namespace WebCore.Controllers
     public class BlogsController : Controller
     {
         private readonly ApplicationDbContext _context;
-        private readonly IBlogService _service;
+        private readonly IBlogService _blog;
 
-        public BlogsController(ApplicationDbContext context, IBlogService service)
+        public BlogsController()
+        {
+
+        }
+
+        public BlogsController(ApplicationDbContext context, IBlogService blog)
         {
             _context = context;
-            _service = service;
+            _blog = blog;
         }
 
         // GET: Blogs        
         public IActionResult Index()
         {
-            return View(_service.Listar());
+            return View(_blog.Listar());
         }
 
         // GET: Blogs/Details/5
@@ -36,7 +41,7 @@ namespace WebCore.Controllers
                 return NotFound();
             }
 
-            var blog = _service.Obter(id.Value);
+            var blog = _blog.Obter(id.Value);
             if (blog == null)
             {
                 return NotFound();
@@ -60,7 +65,7 @@ namespace WebCore.Controllers
         {
             if (ModelState.IsValid)
             {
-                _service.Salvar(blog);
+                _blog.Salvar(blog);
                 return RedirectToAction("Index");
             }
             return View(blog);
@@ -74,7 +79,7 @@ namespace WebCore.Controllers
                 return NotFound();
             }
 
-            var blog = _service.Obter(id.Value);
+            var blog = _blog.Obter(id.Value);
             if (blog == null)
             {
                 return NotFound();
@@ -98,11 +103,11 @@ namespace WebCore.Controllers
             {
                 try
                 {
-                    _service.Salvar(blog);
+                    _blog.Salvar(blog);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (_service.Obter(id) == null)
+                    if (_blog.Obter(id) == null)
                     {
                         return NotFound();
                     }
@@ -124,7 +129,7 @@ namespace WebCore.Controllers
                 return NotFound();
             }
 
-            var blog = _service.Obter(id.Value);
+            var blog = _blog.Obter(id.Value);
             if (blog == null)
             {
                 return NotFound();
@@ -138,7 +143,7 @@ namespace WebCore.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult DeleteConfirmed(int id)
         {
-            _service.Deletar(id);
+            _blog.Deletar(id);
             return RedirectToAction("Index");
         }
     }
