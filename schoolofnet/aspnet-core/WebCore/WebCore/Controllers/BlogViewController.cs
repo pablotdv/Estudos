@@ -18,7 +18,7 @@ namespace WebCore.Controllers
         }
         // GET: BlogView
         public ActionResult Index()
-        {
+        {            
             return View(_db.Blog.ToList());
         }
 

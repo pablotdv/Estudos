@@ -4,6 +4,10 @@
     ViewData["Title"] = "Index";
 }
 
+@inject WebCore.Services.Spec.IBlogService BlogService
+
+@BlogService.Listar().Count()
+
 <h2>Index</h2>
 
 <p>

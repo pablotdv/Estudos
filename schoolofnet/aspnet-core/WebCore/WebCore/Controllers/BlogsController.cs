@@ -15,12 +15,7 @@ namespace WebCore.Controllers
     {
         private readonly ApplicationDbContext _context;
         private readonly IBlogService _blog;
-
-        public BlogsController()
-        {
-
-        }
-
+                
         public BlogsController(ApplicationDbContext context, IBlogService blog)
         {
             _context = context;
