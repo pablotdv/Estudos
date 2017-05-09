@@ -12,6 +12,7 @@ using Microsoft.Extensions.Options;
 using WebCore.Models;
 using WebCore.Models.AccountViewModels;
 using WebCore.Services;
+using WebCore.Controllers.Filters;
 
 namespace WebCore.Controllers
 {
@@ -45,8 +46,16 @@ namespace WebCore.Controllers
         // GET: /Account/Login
         [HttpGet]
         [AllowAnonymous]
+        //Depois do Authoriza = ResourceFilter
+        [MeuResourceFilter]
+        [MeuActionFilter]
+        [MeuResultFilter]
+        [MeuExceptionFilter]
         public async Task<IActionResult> Login(string returnUrl = null)
         {
+            int a = 10;
+            int b = 0;
+            //var c = a / b;
             // Clear the existing external cookie to ensure a clean login process
             await HttpContext.Authentication.SignOutAsync(_externalCookieScheme);
 
