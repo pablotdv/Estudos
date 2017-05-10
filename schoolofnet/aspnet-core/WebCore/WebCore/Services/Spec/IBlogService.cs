@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using WebCore.Models.ManageBlog;
+using WebCore.ViewModels;
 
 namespace WebCore.Services.Spec
 {
@@ -9,5 +11,6 @@ namespace WebCore.Services.Spec
         IEnumerable<Blog> Listar();
         Blog Obter(int id);
         void Salvar(Blog blog);
+        Task SalvarAsync(Blog blog);
     }
 }

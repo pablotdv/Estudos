@@ -7,16 +7,20 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using WebCore.Data;
 using WebCore.Models.ManageBlog;
+using WebCore.ViewModels;
+using WebCore.Services.Spec;
 
 namespace WebCore.Controllers
 {
     public class BlogsEFController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly IBlogService _service;
 
-        public BlogsEFController(ApplicationDbContext context)
+        public BlogsEFController(ApplicationDbContext context, IBlogService service)
         {
-            _context = context;    
+            _context = context;
+            _service = service;
         }
 
         // GET: BlogsEF
@@ -54,15 +58,23 @@ namespace WebCore.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ID,Tilulo,Resumo,Url,Autor")] Blog blog)
+        public async Task<IActionResult> Create([Bind("ID,Tilulo,Resumo,Url,Autor")] BlogViewModel model)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(blog);
-                await _context.SaveChangesAsync();
+                Blog blog = new Blog()
+                {
+                    Autor = model.Autor,
+                    ID = model.ID,
+                    Resumo = model.Resumo,
+                    Tilulo = model.Tilulo,
+                    Url = model.Url,
+                };
+                await _service.SalvarAsync(blog);
+                               
                 return RedirectToAction("Index");
             }
-            return View(blog);
+            return View(model);
         }
 
         // GET: BlogsEF/Edit/5

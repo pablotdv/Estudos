@@ -30,6 +30,19 @@ namespace WebCore.Services.Impl
             _context.SaveChanges();
         }
 
+        public async Task SalvarAsync(Blog blog)
+        {
+            if (blog.ID > 0)
+            {
+                _context.Blog.Attach(blog);
+                _context.Entry(blog).State = EntityState.Modified;
+            }
+            else await _context.Blog.AddAsync(blog);
+
+            await _context.SaveChangesAsync();
+
+        }
+
         public Blog Obter(int id)
         {
             return _context.Blog.Find(id);
@@ -46,5 +59,7 @@ namespace WebCore.Services.Impl
             _context.Remove(blog);
             _context.SaveChanges();
         }
+
+        
     }
 }
