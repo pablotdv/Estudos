@@ -27,5 +27,8 @@ namespace WebCore.ViewModels
 
         [MaxLength(100)]
         public string Autor { get; set; }
+
+        [Required]
+        public string Captcha { get; set; }
     }
 }

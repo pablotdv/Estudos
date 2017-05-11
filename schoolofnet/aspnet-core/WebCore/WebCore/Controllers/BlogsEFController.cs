@@ -58,21 +58,26 @@ namespace WebCore.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ID,Tilulo,Resumo,Url,Autor")] BlogViewModel model)
+        public async Task<IActionResult> Create([Bind("ID,Tilulo,Resumo,Url,Autor,Captcha")] BlogViewModel model)
         {
             if (ModelState.IsValid)
             {
-                Blog blog = new Blog()
+                if (model.Captcha == "123789")
                 {
-                    Autor = model.Autor,
-                    ID = model.ID,
-                    Resumo = model.Resumo,
-                    Tilulo = model.Tilulo,
-                    Url = model.Url,
-                };
-                await _service.SalvarAsync(blog);
-                               
-                return RedirectToAction("Index");
+
+
+                    Blog blog = new Blog()
+                    {
+                        Autor = model.Autor,
+                        ID = model.ID,
+                        Resumo = model.Resumo,
+                        Tilulo = model.Tilulo,
+                        Url = model.Url,
+                    };
+                    await _service.SalvarAsync(blog);
+
+                    return RedirectToAction("Index");
+                }
             }
             return View(model);
         }
