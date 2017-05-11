@@ -14,6 +14,8 @@ using WebCore.Models;
 using WebCore.Services;
 using WebCore.Services.Impl;
 using WebCore.Services.Spec;
+using WebCore.Models.ManageBlog;
+using WebCore.ViewModels;
 
 namespace WebCore
 {
@@ -48,6 +50,14 @@ namespace WebCore
             services.AddIdentity<ApplicationUser, IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
+
+            var config = new AutoMapper.MapperConfiguration(cfg =>
+            {
+                cfg.CreateMap<BlogViewModel, Blog>();
+            });
+
+            var mapper = config.CreateMapper();
+            services.AddSingleton(mapper);
 
             services.AddMvc();
 

@@ -9,6 +9,7 @@ using WebCore.Data;
 using WebCore.Models.ManageBlog;
 using WebCore.ViewModels;
 using WebCore.Services.Spec;
+using AutoMapper;
 
 namespace WebCore.Controllers
 {
@@ -16,11 +17,13 @@ namespace WebCore.Controllers
     {
         private readonly ApplicationDbContext _context;
         private readonly IBlogService _service;
+        private readonly IMapper _mapper;
 
-        public BlogsEFController(ApplicationDbContext context, IBlogService service)
+        public BlogsEFController(ApplicationDbContext context, IBlogService service, IMapper mapper)
         {
             _context = context;
             _service = service;
+            _mapper = mapper;
         }
 
         // GET: BlogsEF
@@ -64,16 +67,10 @@ namespace WebCore.Controllers
             {
                 if (model.Captcha == "123789")
                 {
+                    //Blog blog = Mapper.Map<BlogViewModel, Blog>(model);
 
+                    var blog = _mapper.Map<Blog>(model);
 
-                    Blog blog = new Blog()
-                    {
-                        Autor = model.Autor,
-                        ID = model.ID,
-                        Resumo = model.Resumo,
-                        Tilulo = model.Tilulo,
-                        Url = model.Url,
-                    };
                     await _service.SalvarAsync(blog);
 
                     return RedirectToAction("Index");
