@@ -12,5 +12,6 @@ namespace WebCore.Services.Spec
         Blog Obter(int id);
         void Salvar(Blog blog);
         Task SalvarAsync(Blog blog);
+        Task<Blog> ObterAsync(int? id);
     }
 }

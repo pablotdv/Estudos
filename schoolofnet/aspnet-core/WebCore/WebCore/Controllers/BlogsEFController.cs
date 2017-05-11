@@ -89,8 +89,9 @@ namespace WebCore.Controllers
             {
                 return NotFound();
             }
+                        
+            var blog = await _service.ObterAsync(id);
 
-            var blog = await _context.Blog.SingleOrDefaultAsync(m => m.ID == id);
             if (blog == null)
             {
                 return NotFound();

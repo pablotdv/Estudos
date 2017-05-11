@@ -48,6 +48,11 @@ namespace WebCore.Services.Impl
             return _context.Blog.Find(id);
         }
 
+        public async Task<Blog> ObterAsync(int? id)
+        {
+            return await _context.Blog.FindAsync(id);
+        }
+
         public IEnumerable<Blog> Listar()
         {
             return _context.Blog.ToList();
