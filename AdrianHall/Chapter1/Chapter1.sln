@@ -15,6 +15,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TodoList.UWP", "TodoList\To
 EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		TodoList\TodoList\TodoList.projitems*{292d9fdc-5abe-4cdb-be89-6fd5af9b8f08}*SharedItemsImports = 4
 		TodoList\TodoList\TodoList.projitems*{5d08bb7b-a606-436c-a8ec-43b57c24223e}*SharedItemsImports = 4
 		TodoList\TodoList\TodoList.projitems*{a0f8e87d-eb0a-4fba-823d-30c61fd2f9c1}*SharedItemsImports = 4
 		TodoList\TodoList\TodoList.projitems*{cc9786a3-c38e-4eff-9231-f50180cf9d70}*SharedItemsImports = 13
