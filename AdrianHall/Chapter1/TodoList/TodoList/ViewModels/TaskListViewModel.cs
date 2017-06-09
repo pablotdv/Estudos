@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.Diagnostics;
 using System.Text;
 using System.Threading.Tasks;
@@ -15,7 +16,15 @@ namespace TodoList.ViewModels
         public TaskListViewModel()
         {
             Title = "Task List";
+#pragma warning disable CS4014
             RefreshList();
+#pragma warning restore CS4014
+            items.CollectionChanged += this.OnCollectionChanged;
+        }
+
+        void OnCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            Debug.WriteLine("[TaskList] OnCollectionChanged: Items have changed");
         }
 
         ObservableCollection<TodoItem> items = new ObservableCollection<TodoItem>();
