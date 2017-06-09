@@ -2,19 +2,23 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-
+using TodoList.Abstractions;
+using TodoList.Services;
 using Xamarin.Forms;
 
 namespace TodoList
 {
 	public partial class App : Application
 	{
-		public App ()
+        public static ICloudService CloudService { get; set; }
+
+        public App ()
 		{
 			InitializeComponent();
 
-			MainPage = new TodoList.MainPage();
-		}
+            CloudService = new AzureCloudService();
+            MainPage = new NavigationPage(new Pages.EntryPage());
+        }
 
 		protected override void OnStart ()
 		{
