@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Capitulo01
+namespace Exemplos
 {
     internal class Dollar
     {        
@@ -15,8 +15,8 @@ namespace Capitulo01
         }
 
 
-        internal void Times(int multiplier) {
-            _amount *= multiplier;
+        internal Dollar Times(int multiplier) {
+            return new Dollar(_amount * multiplier);            
         }
     }
 }

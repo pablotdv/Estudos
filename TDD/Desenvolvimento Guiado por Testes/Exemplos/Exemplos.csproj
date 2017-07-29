@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{2351D74F-7B39-42C4-ADAA-200EAA727857}</ProjectGuid>
+    <ProjectGuid>{2AA4D396-2BE3-41EE-9272-FB81FBD3950A}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Capitulo01</RootNamespace>
-    <AssemblyName>Capitulo01</AssemblyName>
+    <RootNamespace>Exemplos</RootNamespace>
+    <AssemblyName>Exemplos</AssemblyName>
     <TargetFrameworkVersion>v4.7</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -48,7 +48,8 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Capitulo01.cs" />
+    <Compile Include="UnitTest1.cs" />
+    <Compile Include="Dollar.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

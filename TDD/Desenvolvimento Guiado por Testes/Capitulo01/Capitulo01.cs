@@ -4,7 +4,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace Capitulo01
 {
     [TestClass]
-    public class UnitTest1
+    public class Capitulo01
     {
         [TestMethod]
         public void TestMultiplication()
